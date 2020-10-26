@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { set, get } from 'idb-keyval';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// TODO: refactor to own tests
+async function testIDBKeyval() {
+    await set('hello', 'world');
+    const whatDoWeHave = await get('hello');
+    console.log(`When we queried idb-keyval for 'hello', we found: ${whatDoWeHave}`);
+}
+
+testIDBKeyval();

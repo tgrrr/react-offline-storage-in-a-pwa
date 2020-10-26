@@ -1,24 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+
+const sharedStyles = {
+  height: "100rem",
+  fontSize: "5rem",
+  textAlign: "center"
+} as const;
 
 function App() {
+  const [darkModeOn, setDarkModeOn] = useState(true)
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => setDarkModeOn(target.checked);
+
+  const styles = {
+    ...sharedStyles,
+    ...(darkModeOn
+      ? {
+          backgroundColor: "black",
+          color: "white"
+        }
+      : {
+          backgroundColor: "white",
+          color: "black"
+        })
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={styles}>
+      <input
+        type="checkbox"
+        value="darkMode"
+        checked={darkModeOn}
+        id="darkModeOn"
+        name="darkModeOn"
+        style={{ width: "3rem", height: "3rem" }}
+        onChange={handleOnChange}
+      />
+      <label htmlFor="darkModeOn">Use dark mode?</label>
     </div>
   );
 }
