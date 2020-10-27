@@ -64,8 +64,9 @@ function App() {
 				To test that the form works in offline mode:<p />
 				4. Disconnect your internet<br />
 				5. Toggle dark mode (eg back to  to dark)<br />
-				6. Reload the page<br />
-				7. It should still be dark!<br />
+				6. Turn internet back on
+				7. Reload the page<br />
+				8. It should still be dark!<br />
 				</div>
 			 </div>
           </>
