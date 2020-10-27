@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { set, get } from "idb-keyval";
 import "./App.css";
 
 const sharedStyles = {
@@ -8,8 +9,20 @@ const sharedStyles = {
 } as const;
 
 function App() {
-  const [darkModeOn, setDarkModeOn] = useState(true)
-  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => setDarkModeOn(target.checked);
+  const [darkModeOn, setDarkModeOn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    get<boolean>("darkModeOn").then(value =>
+      // If a value is retrieved then use it; otherwise default to true
+      setDarkModeOn(value ?? true)
+    );
+  }, [setDarkModeOn]);
+
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setDarkModeOn(target.checked);
+
+    set("darkModeOn", target.checked);
+  };
 
   const styles = {
     ...sharedStyles,
@@ -26,16 +39,22 @@ function App() {
 
   return (
     <div style={styles}>
-      <input
-        type="checkbox"
-        value="darkMode"
-        checked={darkModeOn}
-        id="darkModeOn"
-        name="darkModeOn"
-        style={{ width: "3rem", height: "3rem" }}
-        onChange={handleOnChange}
-      />
-      <label htmlFor="darkModeOn">Use dark mode?</label>
+      {darkModeOn === undefined ? (
+        <>Loading preferences...</>
+      ) : (
+        <>
+          <input
+            type="checkbox"
+            value="darkMode"
+            checked={darkModeOn}
+            id="darkModeOn"
+            name="darkModeOn"
+            style={{ width: "3rem", height: "3rem" }}
+            onChange={handleOnChange}
+          />
+          <label htmlFor="darkModeOn">Use dark mode?</label>
+        </>
+      )}
     </div>
   );
 }
